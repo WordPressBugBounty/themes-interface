@@ -3,8 +3,8 @@
 Contributors: themehorse
 Requires at least: 4.7
 Requires PHP: 5.2
-Tested up to: 6.5
-Stable tag: 3.2
+Tested up to: 7.0
+Stable tag: 3.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Tags: blog, e-commerce, news, one-column, two-columns, left-sidebar, right-sidebar, custom-background, custom-header, custom-logo, custom-menu, featured-image-header, featured-images, footer-widgets, full-width-template, rtl-language-support, sticky-post, theme-options, threaded-comments, translation-ready
@@ -37,6 +37,11 @@ GNU General Public License for more details.
 * Other all resources, Copyright Theme Horse, MIT/GPL2
 
 == CHANGE LOG ==
+
+= 3.3 =
+* Fix - Translation loading triggered too early notice fixed
+* Update - Minor UI improvements to ensure compatibility with WordPress 7.0
+* Update - Removed deprecated IE conditional comments to ensure compatibility with WordPress 6.9
 
 = 3.2 =
 * Update - fontawesome updated to version 6.5.2

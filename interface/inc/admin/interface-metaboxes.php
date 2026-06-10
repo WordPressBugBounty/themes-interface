@@ -30,40 +30,37 @@ function interface_add_custom_box() {
 
 /****************************************************************************************/
 
-global $sidebar_layout;
-$sidebar_layout = array(
+function interface_get_sidebar_layouts() {
+
+	return array(
 							'default-sidebar' 		=> array(
 															'id'			=> 'interface_sidebarlayout',
 															'value' 		=> 'default',
-															'label' 		=> __( 'Default Layout Set in', 'interface' ).' '.'<a href="'.wp_customize_url() .'?autofocus[section]=interface_default_layout" target="_blank" rel="noopener noreferrer">'.__( 'Customizer', 'interface' ).'</a>',
-															'thumbnail' => ' '
+															'label' 		=> __( 'Default Layout Set in', 'interface' ).' '.'<a href="'.wp_customize_url() .'?autofocus[section]=interface_default_layout" target="_blank" rel="noopener noreferrer">'.__( 'Customizer', 'interface' ).'</a>'
 															),
 							'no-sidebar' 				=> array(
 															'id'			=> 'interface_sidebarlayout',
 															'value' 		=> 'no-sidebar',
-															'label' 		=> __( 'No sidebar', 'interface' ),
-															'thumbnail' => ''
+															'label' 		=> __( 'No sidebar', 'interface' )
 															), 
 							'no-sidebar-full-width' => array(
 															'id'			=> 'interface_sidebarlayout',
 															'value' 		=> 'no-sidebar-full-width',
-															'label' 		=> __( 'No sidebar, Full Width', 'interface' ),
-															'thumbnail' => ''
+															'label' 		=> __( 'No sidebar, Full Width', 'interface' )
 															),
 							
 							'left-sidebar' => array(
 															'id'			=> 'interface_sidebarlayout',
 															'value' 		=> 'left-sidebar',
-															'label' 		=> __( 'Left sidebar', 'interface' ),
-															'thumbnail' => ''
+															'label' 		=> __( 'Left sidebar', 'interface' )
 															),
 							'right-sidebar' => array(
 															'id' 			=> 'interface_sidebarlayout',
 															'value' 		=> 'right-sidebar',
-															'label' 		=> __( 'Right sidebar', 'interface' ),
-															'thumbnail' => ''
+															'label' 		=> __( 'Right sidebar', 'interface' )
 															)
 						);
+}
 	
 /****************************************************************************************/
 
@@ -71,7 +68,8 @@ $sidebar_layout = array(
  * Displays metabox to for sidebar layout
  */
 function interface_sidebar_layout() {  
-	global $sidebar_layout, $post;  
+	global $post;
+	$sidebar_layout = interface_get_sidebar_layouts();
 	// Use nonce for verification  
 	wp_nonce_field( basename( __FILE__ ), 'custom_meta_box_nonce' ); // for security purpose
 
@@ -79,25 +77,19 @@ function interface_sidebar_layout() {
 
 <table id="sidebar-metabox" class="form-table" width="100%">
   <tbody>
-    <tr>
-      <?php  
-				foreach ($sidebar_layout as $field) {  
-					$meta = get_post_meta( $post->ID, $field['id'], true );
-					if(empty( $meta ) ){
-						$meta='default';
-					}
-					if( ' ' == $field['thumbnail'] ): ?>
-      <label class="description">
-        <input type="radio" name="<?php echo $field['id']; ?>" value="<?php echo $field['value']; ?>" <?php checked( $field['value'], $meta ); ?>/>
-        &nbsp;&nbsp;<?php echo $field['label']; ?> </label>
-      <?php else: ?>
-      <td><label class="description">
-          <input type="radio" name="<?php echo $field['id']; ?>" value="<?php echo $field['value']; ?>" <?php checked( $field['value'], $meta ); ?>/>
-          &nbsp;&nbsp;<?php echo $field['label']; ?> </label></td>
-      <?php endif;
-				} // end foreach 
-				?>
-    </tr>
+	<tr>
+		<?php foreach ( $sidebar_layout as $field ) {  
+			$meta = get_post_meta( $post->ID, $field['id'], true );
+
+			if ( empty( $meta ) ) {
+				$meta = 'default';
+			} ?>
+			<td>
+				<label class="description">
+				<input type="radio" name="<?php echo esc_attr( $field['id'] ); ?>" value="<?php echo esc_attr( $field['value'] ); ?>" <?php checked( esc_attr( $field['value'] ), $meta ); ?>/><?php echo $field['label']; ?></label>
+			</td>
+		<?php } // end foreach ?>
+	</tr>
   </tbody>
 </table>
 <?php 
@@ -112,7 +104,7 @@ add_action('save_post', 'interface_save_custom_meta');
  * @hooked to save_post hook
  */
 function interface_save_custom_meta( $post_id ) { 
-	global $sidebar_layout, $post; 
+	$sidebar_layout = interface_get_sidebar_layouts();
 	
 	// Verify the nonce before proceeding.
     if ( !isset( $_POST[ 'custom_meta_box_nonce' ] ) || !wp_verify_nonce( $_POST[ 'custom_meta_box_nonce' ], basename( __FILE__ ) ) )

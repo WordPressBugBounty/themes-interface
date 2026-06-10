@@ -20,6 +20,11 @@ add_action( 'after_setup_theme', 'interface_setup' );
 		if ( ! isset( $content_width ) ){
 			$content_width = 700;
 		}
+		
+		require_once( INTERFACE_FUNCTIONS_DIR . '/i18n.php' );
+		
+		// This theme uses wp_nav_menu() in header menu location.
+		register_nav_menu( 'primary', __( 'Primary Menu', 'interface' ) );
  }
 
 
@@ -83,7 +88,6 @@ function interface_load_files() {
 	do_action( 'interface_add_files' );
 
 	/** Load functions */
-	require_once( INTERFACE_FUNCTIONS_DIR . '/i18n.php' );
 	require_once( INTERFACE_FUNCTIONS_DIR . '/custom-header.php' );
 	require_once( INTERFACE_FUNCTIONS_DIR . '/functions.php' );
 	require_once( INTERFACE_FUNCTIONS_DIR . '/custom-style.php' );
@@ -134,9 +138,6 @@ function interface_core_functionality() {
 	// This theme uses Featured Images (also known as post thumbnails) for per-post/per-page.
 	add_theme_support( 'post-thumbnails' ); 
  
-	// This theme uses wp_nav_menu() in header menu location.
-	register_nav_menu( 'primary', __( 'Primary Menu', 'interface' ) );
-
 	// Add Interface custom image sizes
 	add_image_size( 'featured', 670, 300, true );
 	add_image_size( 'featured-medium', 230, 160, true );
